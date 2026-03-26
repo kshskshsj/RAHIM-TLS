@@ -1,21 +1,4 @@
 steps:
-  # 1️⃣ تثبيت dependencies
-  - name: 'node:18'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        npm install
-
-  # 2️⃣ Build (مش مطلوب في مشروعنا لأنه Node.js)
-  - name: 'node:18'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "No build needed for Node.js project"
-
-  # 3️⃣ نشر على Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'run'
@@ -25,6 +8,6 @@ steps:
       - '--region=southamerica-east1'
       - '--platform=managed'
       - '--allow-unauthenticated'
-      - '--set-env-vars=TARGETS=http://example1.com;http://example2.com,ROTATE_HOSTS=amazing-140612383485.southamerica-east1.run.app;system-709797137484.southamerica-east1.run.app,USERNAME=RAHIMDX,PASSWORD=RAHIMDX,PATH_ROUTE=/app17'
+      - '--set-env-vars=USERNAME=RAHIMDX,PASSWORD=RAHIMDX,PATH_ROUTE=/app17'
 
 timeout: '900s'
