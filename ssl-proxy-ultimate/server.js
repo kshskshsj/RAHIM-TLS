@@ -8,12 +8,14 @@ const USERNAME = process.env.USERNAME || "RAHIMDX";
 const PASSWORD = process.env.PASSWORD || "RAHIMDX";
 const PATH = process.env.PATH_ROUTE || "/app17";
 
+const TARGET = process.env.TARGET || "YouTube.com";
+const TARGET_PORT = process.env.TARGET_PORT || 443;
+
 const server = http.createServer((req, res) => {
   res.writeHead(200);
-  res.end("SSL Proxy Running ✅");
+  res.end("SSL Proxy Ultimate Running ✅");
 });
 
-// 🔥 دعم WebSocket (المهم)
 server.on("upgrade", (req, socket, head) => {
   const pathname = url.parse(req.url).pathname;
 
@@ -22,23 +24,24 @@ server.on("upgrade", (req, socket, head) => {
     return;
   }
 
-  // 🔐 تحقق من auth
+  // 🔐 AUTH REQUIRED
   const auth = req.headers["authorization"];
-  if (auth) {
-    const base64 = auth.split(" ")[1];
-    const decoded = Buffer.from(base64, "base64").toString();
-    const [user, pass] = decoded.split(":");
 
-    if (user !== USERNAME || pass !== PASSWORD) {
-      socket.destroy();
-      return;
-    }
+  if (!auth) {
+    socket.destroy();
+    return;
   }
 
-  // 🔗 الاتصال بالسيرفر النهائي
-  const target = "YouTube.com"; // تقدر تبدلها من ENV
+  const base64 = auth.split(" ")[1];
+  const decoded = Buffer.from(base64, "base64").toString();
+  const [user, pass] = decoded.split(":");
 
-  const remote = net.connect(443, target, () => {
+  if (user !== USERNAME || pass !== PASSWORD) {
+    socket.destroy();
+    return;
+  }
+
+  const remote = net.connect(TARGET_PORT, TARGET, () => {
     socket.write(
       "HTTP/1.1 101 Switching Protocols\r\n" +
       "Connection: Upgrade\r\n" +
@@ -46,7 +49,6 @@ server.on("upgrade", (req, socket, head) => {
     );
 
     remote.write(head);
-
     socket.pipe(remote);
     remote.pipe(socket);
   });
@@ -55,5 +57,5 @@ server.on("upgrade", (req, socket, head) => {
 });
 
 server.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Ultimate server running on port " + PORT);
 });
