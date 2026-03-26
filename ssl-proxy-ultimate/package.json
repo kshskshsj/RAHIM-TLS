@@ -1,11 +1,8 @@
 {
   "name": "ssl-proxy-ultimate",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "main": "server.js",
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "http-proxy": "^1.18.1"
+  "scripts": {
+    "start": "node server.js"
   }
 }
